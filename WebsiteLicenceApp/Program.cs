@@ -22,5 +22,6 @@ namespace WebsiteLicenceApp
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
     }
 }
