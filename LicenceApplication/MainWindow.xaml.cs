@@ -24,15 +24,5 @@ namespace LicenceApplication
         {
             InitializeComponent();
         }
-
-        private void BtnOK_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
