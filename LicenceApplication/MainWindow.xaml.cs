@@ -24,17 +24,5 @@ namespace LicenceApplication
         {
             InitializeComponent();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            User u = new User();
-            u.Id = 1;
-            u.Name = "sdsd";
-            AppContext db = new AppContext();
-            db.Users.Add(u);
-            db.SaveChanges();
-            name_Copy.Text = db.Licences.Count().ToString();
-            ;
-        }
     }
 }

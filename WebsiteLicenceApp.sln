@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteLicenceApp", "WebsiteLicenceApp\WebsiteLicenceApp.csproj", "{DB06C947-840A-4DD0-8E31-536B7ED59804}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsiteLicenceApp", "WebsiteLicenceApp\WebsiteLicenceApp.csproj", "{DB06C947-840A-4DD0-8E31-536B7ED59804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenceApplication", "LicenceApplication\LicenceApplication.csproj", "{594149F1-889D-4FE5-9FA5-5BB369495B90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenceApplication", "LicenceApplication\LicenceApplication.csproj", "{F97B30D3-F33D-4B06-B01C-6FD4DB301E4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{DB06C947-840A-4DD0-8E31-536B7ED59804}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB06C947-840A-4DD0-8E31-536B7ED59804}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB06C947-840A-4DD0-8E31-536B7ED59804}.Release|Any CPU.Build.0 = Release|Any CPU
-		{594149F1-889D-4FE5-9FA5-5BB369495B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{594149F1-889D-4FE5-9FA5-5BB369495B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{594149F1-889D-4FE5-9FA5-5BB369495B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{594149F1-889D-4FE5-9FA5-5BB369495B90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F97B30D3-F33D-4B06-B01C-6FD4DB301E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F97B30D3-F33D-4B06-B01C-6FD4DB301E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F97B30D3-F33D-4B06-B01C-6FD4DB301E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F97B30D3-F33D-4B06-B01C-6FD4DB301E4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
