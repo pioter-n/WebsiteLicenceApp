@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LicenceApplication.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,6 @@ namespace LicenceApplication
         {
             optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=LicenceDb;Trusted_Connection=True;");
         }
+        public DbSet<Users> Users { get; set; }
     }
 }
