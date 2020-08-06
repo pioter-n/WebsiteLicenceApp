@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,17 +25,27 @@ namespace LicenceApplication
         }
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(TBUser.Text) && !String.IsNullOrWhiteSpace(TBUser.Text))
-            {
-                MainWindow Main = new MainWindow();
-                Main.Show();
-                this.Close();
-            }
+            /* if (!String.IsNullOrEmpty(TBUser.Text) && !String.IsNullOrWhiteSpace(TBUser.Text))
+             {
+                 MainWindow Main = new MainWindow();
+                 Main.Show();
+                 this.Close();
+             }*/
+            _ = PostCallAPI();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        public static async Task<object> PostCallAPI()
+        {
+            var client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://localhost:44370/connect/token");
+            string responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(responseBody);
+
+            return null;
         }
     }
 }
