@@ -31,7 +31,7 @@ namespace LicenceApplication
                  Main.Show();
                  this.Close();
              }*/
-            _ = PostCallAPI();
+           _ = PostCallAPI();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
