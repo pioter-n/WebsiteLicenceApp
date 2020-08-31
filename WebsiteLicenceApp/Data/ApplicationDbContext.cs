@@ -16,5 +16,6 @@ namespace WebsiteLicenceApp.Data
            
         }
         public DbSet<LicenceModel> UserLicence { get; set; }
+        
     }
 }

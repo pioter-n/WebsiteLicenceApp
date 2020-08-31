@@ -41,7 +41,7 @@ namespace LicenceApplication
         public static async Task<object> PostCallAPI()
         {
             var client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("https://localhost:44370/connect/token");
+            HttpResponseMessage response = await client.GetAsync("https://localhost:44370/api/LicenceModels");
             string responseBody = await response.Content.ReadAsStringAsync();
             Console.WriteLine(responseBody);
 

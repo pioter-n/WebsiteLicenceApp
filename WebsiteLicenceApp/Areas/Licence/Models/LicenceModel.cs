@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace WebsiteLicenceApp.Models
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public virtual IdentityUser User { get; set; }
         public string Licence { get; set; }
         public bool Paid { get; set; }
     }
