@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,21 +32,28 @@ namespace LicenceApplication
                  Main.Show();
                  this.Close();
              }*/
-           _ = PostCallAPI();
+            string oAuthInfo = GetToken("https://localhost:44370/","baczkiewiczpiotr@gmail.com","Karolina2000!");
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-        public static async Task<object> PostCallAPI()
+        static string GetToken(string url, string userName, string password)
         {
-            var client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("https://localhost:44370/api/LicenceModels");
-            string responseBody = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseBody);
-
-            return null;
+            var pairs = new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>( "grant_type", "password" ),
+                        new KeyValuePair<string, string>( "username", userName ),
+                        new KeyValuePair<string, string> ( "Password", password )
+                    };
+            var content = new FormUrlEncodedContent(pairs);
+           // ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            using (var client = new HttpClient())
+            {
+                var response = client.PostAsync(url + "Token", content).Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
         }
     }
 }
