@@ -12,6 +12,7 @@ using WebsiteLicenceApp.Models;
 
 namespace WebsiteLicenceApp.Areas.Licence.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class LicenceModelsController : ControllerBase
@@ -22,13 +23,14 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         {
             _context = context;
         }
-
         // GET: api/LicenceModels
+        [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IdentityUser>> GetUserLicence()
+        public async Task<ActionResult<string>> GetUserLicence()
         {
             List<LicenceModel> a = await _context.UserLicence.ToListAsync();
-            return _context.UserLicence.First<LicenceModel>().User;
+            //return _context.UserLicence.First<LicenceModel>().User;
+            return "Piotr";
             //return await _context.UserLicence.ToListAsync();
         }
 

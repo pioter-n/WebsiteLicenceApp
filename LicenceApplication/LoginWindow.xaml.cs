@@ -1,5 +1,7 @@
-﻿using System;
+﻿using IdentityModel.Client;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,36 +26,96 @@ namespace LicenceApplication
         {
             InitializeComponent();
         }
-        private void BtnOK_Click(object sender, RoutedEventArgs e)
+        private async void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            /* if (!String.IsNullOrEmpty(TBUser.Text) && !String.IsNullOrWhiteSpace(TBUser.Text))
-             {
-                 MainWindow Main = new MainWindow();
-                 Main.Show();
-                 this.Close();
-             }*/
-            string oAuthInfo = GetToken("https://localhost:44370/","baczkiewiczpiotr@gmail.com","Karolina2000!");
+            if (String.IsNullOrEmpty(TBUser.Text) || String.IsNullOrWhiteSpace(TBUser.Text))
+            {
+
+                this.Close();
+            }
+            else
+                await Call();
+
+            MainWindow Main = new MainWindow();
+            Main.Show();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-        static string GetToken(string url, string userName, string password)
+        private async Task Call()
         {
-            var pairs = new List<KeyValuePair<string, string>>
-                    {
-                        new KeyValuePair<string, string>( "grant_type", "password" ),
-                        new KeyValuePair<string, string>( "username", userName ),
-                        new KeyValuePair<string, string> ( "Password", password )
-                    };
-            var content = new FormUrlEncodedContent(pairs);
-           // ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            using (var client = new HttpClient())
+            const string clientId = "Authentication.Agent";
+            const string url = "https://localhost:44370";
+            var client = new HttpClient();
+            var requestPasswordToken = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
-                var response = client.PostAsync(url + "Token", content).Result;
-                return response.Content.ReadAsStringAsync().Result;
+                Address = $"{url}/connect/token",
+
+                ClientId = clientId,
+                Scope = "api openid profile Authentication.WebAPI",
+
+                UserName = TBUser.Text,
+                Password = TBPass.Password
+            });
+            if (requestPasswordToken.IsError)
+            {
+                Console.WriteLine(requestPasswordToken.HttpStatusCode);
+                throw new InvalidOperationException("Invalid password!");
             }
+            Console.WriteLine($"Logged in! {requestPasswordToken.Raw}");
+
+            Console.WriteLine("Getting endpoints!");
+
+            var documentResponse = await client.GetDiscoveryDocumentAsync(url);
+
+            if (documentResponse.IsError)
+            {
+                Console.WriteLine(requestPasswordToken.HttpStatusCode);
+                throw new InvalidOperationException("Unable to get endpoints!");
+            }
+
+            Console.WriteLine("Getting user!");
+
+            var userInfoResponse = await client.GetUserInfoAsync(new UserInfoRequest
+            {
+                ClientId = clientId,
+
+                Address = documentResponse.UserInfoEndpoint,
+                Token = requestPasswordToken.AccessToken
+            });
+
+            if (userInfoResponse.IsError)
+            {
+                Console.WriteLine(requestPasswordToken.HttpStatusCode);
+                throw new InvalidOperationException("Unable to get userinfo!");
+            }
+
+            Console.WriteLine(userInfoResponse.HttpStatusCode);
+            Console.WriteLine($"Hello Mr {userInfoResponse.Claims.Single(x => x.Type == "name").Value}");
+
+            client.SetBearerToken(requestPasswordToken.AccessToken);
+            var res = await client.GetAsync($"{url}/api/LicenceModels");
+
+            if (!res.IsSuccessStatusCode)
+            {
+                Console.WriteLine(res.StatusCode);
+                throw new InvalidOperationException("Unable to get resources!");
+            }
+
+            var content = await res.Content.ReadAsStringAsync();
+            Console.WriteLine(content);
+
+            Console.WriteLine("Trying to get resource as unauthenticated user.");
+            client.SetBearerToken(string.Empty);
+
+            res = await client.GetAsync($"{url}/api/LicenceModels");
+            Console.WriteLine(res.StatusCode);
+             content = await res.Content.ReadAsStringAsync();
+            Console.WriteLine(content);
+
+
         }
     }
 }

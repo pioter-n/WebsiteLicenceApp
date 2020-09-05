@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using WebsiteLicenceApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using IdentityServer4.Models;
+using System.Security.Claims;
+using IdentityModel;
+using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Authentication;
+using WebsiteLicenceApp.Models;
 
 namespace WebsiteLicenceApp
 {
@@ -29,9 +29,25 @@ namespace WebsiteLicenceApp
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            var resources = new[]
+           {
+                new ApiResource("api", "My API", new[] {JwtClaimTypes.Name}),
+                new ApiResource("Authentication.WebAPI", "Resource Api", new[] {ClaimTypes.Name})
+            };
+            services.AddSingleton<IClientStore, CustomClientStore>();
+
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential() /* replace in prod env */
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+                .AddClientStore<CustomClientStore>()
+                .AddInMemoryApiResources(resources);
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             
@@ -55,8 +71,8 @@ namespace WebsiteLicenceApp
             app.UseStaticFiles();
 
             app.UseRouting();
-          
 
+            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
 
