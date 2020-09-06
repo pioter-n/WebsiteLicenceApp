@@ -12,6 +12,10 @@ using IdentityModel;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using WebsiteLicenceApp.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using System.Collections.Generic;
 
 namespace WebsiteLicenceApp
 {
@@ -36,7 +40,6 @@ namespace WebsiteLicenceApp
             var resources = new[]
            {
                 new ApiResource("api", "My API", new[] {JwtClaimTypes.Name}),
-                new ApiResource("Authentication.WebAPI", "Resource Api", new[] {ClaimTypes.Name})
             };
             services.AddSingleton<IClientStore, CustomClientStore>();
 
@@ -45,11 +48,16 @@ namespace WebsiteLicenceApp
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
                 .AddClientStore<CustomClientStore>()
                 .AddInMemoryApiResources(resources);
+
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, options =>
+            {
+                options.TokenValidationParameters.ValidAudiences = new List<string> { "api" };
+            });
             
         }
 

@@ -22,7 +22,6 @@ namespace WebsiteLicenceApp
                 AllowedScopes =
                 {
                     "api",
-                    "Authentication.WebAPI",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 }

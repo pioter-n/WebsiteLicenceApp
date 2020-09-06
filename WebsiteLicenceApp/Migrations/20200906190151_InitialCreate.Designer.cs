@@ -10,8 +10,8 @@ using WebsiteLicenceApp.Data;
 namespace WebsiteLicenceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200905183848_identyfikacja")]
-    partial class identyfikacja
+    [Migration("20200906190151_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

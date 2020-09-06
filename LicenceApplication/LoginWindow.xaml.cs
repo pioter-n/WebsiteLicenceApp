@@ -54,7 +54,7 @@ namespace LicenceApplication
                 Address = $"{url}/connect/token",
 
                 ClientId = clientId,
-                Scope = "api openid profile Authentication.WebAPI",
+               
 
                 UserName = TBUser.Text,
                 Password = TBPass.Password
@@ -107,15 +107,17 @@ namespace LicenceApplication
             var content = await res.Content.ReadAsStringAsync();
             Console.WriteLine(content);
 
-            Console.WriteLine("Trying to get resource as unauthenticated user.");
-            client.SetBearerToken(string.Empty);
-
-            res = await client.GetAsync($"{url}/api/LicenceModels");
-            Console.WriteLine(res.StatusCode);
-             content = await res.Content.ReadAsStringAsync();
-            Console.WriteLine(content);
+        
 
 
+        }
+
+        private void LoginWindow1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                BtnOK_Click(null, null);
+            else if ((e.Key == Key.Escape))
+                BtnCancel_Click(null, null);
         }
     }
 }
