@@ -15,28 +15,28 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
-    public class LicenceModelsController : ControllerBase
+    public class LicenceController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public LicenceModelsController(ApplicationDbContext context)
+        public LicenceController(ApplicationDbContext context)
         {
             _context = context;
         }
         // GET: api/LicenceModels
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<ApplicationUser>> GetUserLicence()
+        public async Task<ActionResult<string>> GetUserLicence()
         {
-            List<LicenceModel> a = await _context.UserLicence.ToListAsync();
-            return _context.UserLicence.First<LicenceModel>().User;
-           // return "Piotr";
+            List<Models.Licence> a = await _context.UserLicence.ToListAsync();
+            //return _context.UserLicence.First<LicenceModel>().User;
+            return "Piotr";
             //return await _context.UserLicence.ToListAsync();
         }
 
         // GET: api/LicenceModels/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<LicenceModel>> GetLicenceModel(int id)
+        public async Task<ActionResult<Models.Licence>> GetLicenceModel(int id)
         {
             var licenceModel = await _context.UserLicence.FindAsync(id);
 
@@ -53,7 +53,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLicenceModel(int id, LicenceModel licenceModel)
+        public async Task<IActionResult> PutLicenceModel(int id, Models.Licence licenceModel)
         {
             if (id != licenceModel.Id)
             {
@@ -86,7 +86,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<LicenceModel>> PostLicenceModel(LicenceModel licenceModel)
+        public async Task<ActionResult<Models.Licence>> PostLicenceModel(Models.Licence licenceModel)
         {
             _context.UserLicence.Add(licenceModel);
             await _context.SaveChangesAsync();
@@ -97,7 +97,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // DELETE: api/LicenceModels/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult<LicenceModel>> DeleteLicenceModel(int id)
+        public async Task<ActionResult<Models.Licence>> DeleteLicenceModel(int id)
         {
             var licenceModel = await _context.UserLicence.FindAsync(id);
             if (licenceModel == null)

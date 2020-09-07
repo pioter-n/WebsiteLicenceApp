@@ -13,7 +13,7 @@ namespace WebsiteLicenceApp.Data
         {
            
         }
-        public DbSet<LicenceModel> UserLicence { get; set; }
+        public DbSet<Licence> UserLicence { get; set; }
         
     }
 }

@@ -28,89 +28,54 @@ namespace LicenceApplication
         }
         private async void BtnOK_Click(object sender, RoutedEventArgs e)
         {
+            MyToken myToken = new MyToken();
             if (String.IsNullOrEmpty(TBUser.Text) || String.IsNullOrWhiteSpace(TBUser.Text))
             {
-
                 this.Close();
             }
+            else if (InternetConnection.Connection)
+            {
+                if (!await myToken.RequestPasswordToken(TBUser.Text, TBPass.Password))
+                {
+                    LbPassWrong.Content = "Invalid password or username!";
+                    return;
+                }
+            }
             else
-                await Call();
+            {
+                return;
+            }
 
             MainWindow Main = new MainWindow();
             Main.Show();
+            this.Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-        private async Task Call()
+       /* private async Task<bool> Call()
         {
-            const string clientId = "Authentication.Agent";
-            const string url = "https://localhost:44370";
-            var client = new HttpClient();
-            var requestPasswordToken = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
-            {
-                Address = $"{url}/connect/token",
-
-                ClientId = clientId,
-               
-
-                UserName = TBUser.Text,
-                Password = TBPass.Password
-            });
-            if (requestPasswordToken.IsError)
-            {
-                Console.WriteLine(requestPasswordToken.HttpStatusCode);
-                throw new InvalidOperationException("Invalid password!");
-            }
-            Console.WriteLine($"Logged in! {requestPasswordToken.Raw}");
-
-            Console.WriteLine("Getting endpoints!");
-
-            var documentResponse = await client.GetDiscoveryDocumentAsync(url);
-
-            if (documentResponse.IsError)
-            {
-                Console.WriteLine(requestPasswordToken.HttpStatusCode);
-                throw new InvalidOperationException("Unable to get endpoints!");
-            }
-
-            Console.WriteLine("Getting user!");
-
-            var userInfoResponse = await client.GetUserInfoAsync(new UserInfoRequest
-            {
-                ClientId = clientId,
-
-                Address = documentResponse.UserInfoEndpoint,
-                Token = requestPasswordToken.AccessToken
-            });
-
-            if (userInfoResponse.IsError)
-            {
-                Console.WriteLine(requestPasswordToken.HttpStatusCode);
-                throw new InvalidOperationException("Unable to get userinfo!");
-            }
-
-            Console.WriteLine(userInfoResponse.HttpStatusCode);
-            Console.WriteLine($"Hello Mr {userInfoResponse.Claims.Single(x => x.Type == "name").Value}");
+            
+            
 
             client.SetBearerToken(requestPasswordToken.AccessToken);
-            var res = await client.GetAsync($"{url}/api/LicenceModels");
+            var res = await client.GetAsync($"{url}/api/Licence");
 
             if (!res.IsSuccessStatusCode)
             {
                 Console.WriteLine(res.StatusCode);
-                throw new InvalidOperationException("Unable to get resources!");
+                return false;
             }
 
             var content = await res.Content.ReadAsStringAsync();
             Console.WriteLine(content);
 
-        
 
+            return true;
 
-        }
+        }*/
 
         private void LoginWindow1_KeyDown(object sender, KeyEventArgs e)
         {

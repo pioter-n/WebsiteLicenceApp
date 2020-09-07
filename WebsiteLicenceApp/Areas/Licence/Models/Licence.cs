@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace WebsiteLicenceApp.Models
 {
-    public class LicenceModel
+    public class Licence
     {
         [Key]
         public int Id { get; set; }
         public virtual ApplicationUser User { get; set; }
-        public string Licence { get; set; }
+        public string Licences { get; set; }
         public bool Paid { get; set; }
     }
 }
