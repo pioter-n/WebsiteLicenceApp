@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using Unity;
 
 namespace LicenceApplication
 {
@@ -13,5 +10,18 @@ namespace LicenceApplication
     /// </summary>
     public partial class App : Application
     {
+        public System.IServiceProvider ServiceProvider { get; private set; }
+
+        public IConfiguration Configuration { get; private set; }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            IUnityContainer container = new UnityContainer();
+            container.RegisterType<IMyToken, MyToken>();
+
+            var loginwindow = container.Resolve<LoginWindow>();
+            //var window = new MainWindow { DataContext = loginwindow };
+            loginwindow.Show();
+        }
+      
     }
 }

@@ -22,20 +22,30 @@ namespace LicenceApplication
     /// </summary>
     public partial class LoginWindow : Window
     {
+        IMyToken _token;
+
         public LoginWindow()
         {
+
             InitializeComponent();
+        }
+            public LoginWindow(IMyToken token)
+        {
+            
+            InitializeComponent();
+            _token = token;
         }
         private async void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            MyToken myToken = new MyToken();
+
+            _token = new MyToken();
             if (String.IsNullOrEmpty(TBUser.Text) || String.IsNullOrWhiteSpace(TBUser.Text))
             {
                 this.Close();
             }
             else if (InternetConnection.Connection)
             {
-                if (!await myToken.RequestPasswordToken(TBUser.Text, TBPass.Password))
+                if (!await _token.RequestPasswordToken(TBUser.Text, TBPass.Password))
                 {
                     LbPassWrong.Content = "Invalid password or username!";
                     return;
