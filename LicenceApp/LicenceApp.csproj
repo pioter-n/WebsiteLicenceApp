@@ -21,11 +21,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.7" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="Unity" Version="5.11.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Command\" />
     <Folder Include="View\" />
   </ItemGroup>
 

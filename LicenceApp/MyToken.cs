@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LicenceApp
 {
-     class MyToken : IMyToken
+     class MyToken 
     {
         private TokenResponse requestPasswordToken;
         private HttpClient client;

@@ -1,4 +1,5 @@
 ﻿using LicenceApp.Model;
+using LicenceApp.ViewModel;
 using LicenceApplication;
 using System;
 using System.Collections.Generic;
@@ -22,72 +23,79 @@ namespace LicenceApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        MyDbContext _dbContext;
+      //  MyDbContext _dbContext;
         public MainWindow()
         {
-            _dbContext = new MyDbContext();
             InitializeComponent();
-            //_dbContext = dataContext;
-            /*MyDbContext db = new MyDbContext();
-            
-            List<User> l = new List<User>();
-            l = db.Users.ToList();
-            TBUser.Text = l.First().Name;*/
+            this.ViewModel = new MainViewModel();
+         
         }
-        private async void BtnOK_Click(object sender, RoutedEventArgs e)
+
+        public MainViewModel ViewModel
         {
-            MyToken myToken = new MyToken();
-            if (String.IsNullOrEmpty(TBUser.Text) || String.IsNullOrWhiteSpace(TBUser.Text))
+            get
             {
-                LbPassWrong.Content = "Insert password or username!";
-                return;
+                return this.DataContext as MainViewModel;
             }
-            else if (InternetConnection.Connection)
+            set
             {
-                if (!await myToken.RequestPasswordToken(TBUser.Text, TBPass.Password))
-                {
-                    LbPassWrong.Content = "Invalid password or username!";
-                    return;
-                }
-                else
-                {
-                    if (_dbContext.Users.Count(t => t.Name == TBUser.Text) == 0)
-                    {
-                        User User = new User();
-                        User.Name = TBUser.Text;
-                        User.Password = TBPass.Password;
-                        _dbContext.Add(User);
-                        _dbContext.SaveChanges();
-                    }
-                }
+                this.DataContext = value;
             }
-            else
-            {
-                User User = new User();
-                //User.Name = TBUser.Text;
-                //User.Password = TBPass.Password;
-                if(_dbContext.Users.Count(t => t.Name == TBUser.Text)!=0)
-                    User= _dbContext.Users.Where(t => t.Name == TBUser.Text).FirstOrDefault();
-                else
-                {
-                    LbPassWrong.Content = "Invalid password or username!";
-                    return;
-
-                }
-                //_dbContext.SaveChanges();
-
-                return;
-            }
-
-           // MainWindow Main = new MainWindow();
-           // Main.Show();
-           // this.Close();
         }
+        /* private async void BtnOK_Click(object sender, RoutedEventArgs e)
+         {
+             MyToken myToken = new MyToken();
+             if (String.IsNullOrEmpty(TBUser.Text) || String.IsNullOrWhiteSpace(TBUser.Text))
+             {
+                 LbPassWrong.Content = "Insert password or username!";
+                 return;
+             }
+             else if (InternetConnection.Connection)
+             {
+                 if (!await myToken.RequestPasswordToken(TBUser.Text, TBPass.Password))
+                 {
+                     LbPassWrong.Content = "Invalid password or username!";
+                     return;
+                 }
+                 else
+                 {
+                     if (_dbContext.Users.Count(t => t.Name == TBUser.Text) == 0)
+                     {
+                         User User = new User();
+                         User.Name = TBUser.Text;
+                         User.Password = TBPass.Password;
+                         _dbContext.Add(User);
+                         _dbContext.SaveChanges();
+                     }
+                 }
+             }
+             else
+             {
+                 User User = new User();
+                 //User.Name = TBUser.Text;
+                 //User.Password = TBPass.Password;
+                 if(_dbContext.Users.Count(t => t.Name == TBUser.Text)!=0)
+                     User= _dbContext.Users.Where(t => t.Name == TBUser.Text).FirstOrDefault();
+                 else
+                 {
+                     LbPassWrong.Content = "Invalid password or username!";
+                     return;
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+                 }
+                 //_dbContext.SaveChanges();
+
+                 return;
+             }
+
+            // MainWindow Main = new MainWindow();
+            // Main.Show();
+            // this.Close();
+         }
+
+         private void BtnCancel_Click(object sender, RoutedEventArgs e)
+         {
+             this.Close();
+         }*/
         /* private async Task<bool> Call()
          {
 
@@ -104,12 +112,12 @@ namespace LicenceApp
              return true;
          }*/
 
-        private void LoginWindow1_KeyDown(object sender, KeyEventArgs e)
+       /* private void LoginWindow1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 BtnOK_Click(null, null);
             else if ((e.Key == Key.Escape))
                 BtnCancel_Click(null, null);
-        }
+        }*/
     }
 }
