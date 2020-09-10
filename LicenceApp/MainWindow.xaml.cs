@@ -101,7 +101,7 @@ namespace LicenceApp
 
 
              client.SetBearerToken(requestPasswordToken.AccessToken);
-             var res = await client.GetAsync($"{url}/api/Licence");
+             var res = await client.GetAsync($"{url}/api/UserLicence");
              if (!res.IsSuccessStatusCode)
              {
                  Console.WriteLine(res.StatusCode);

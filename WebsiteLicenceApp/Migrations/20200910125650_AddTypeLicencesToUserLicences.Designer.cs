@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebsiteLicenceApp.Data;
 
 namespace WebsiteLicenceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200910125650_AddTypeLicencesToUserLicences")]
+    partial class AddTypeLicencesToUserLicences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,10 +272,15 @@ namespace WebsiteLicenceApp.Migrations
                     b.Property<bool>("Paid")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("TypeLicienceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeLicienceId");
 
                     b.HasIndex("UserId");
 
@@ -398,8 +405,12 @@ namespace WebsiteLicenceApp.Migrations
 
             modelBuilder.Entity("WebsiteLicenceApp.Areas.Licence.Models.UserLicence", b =>
                 {
+                    b.HasOne("WebsiteLicenceApp.Areas.Licence.Models.TypeLicences", "TypeLicience")
+                        .WithMany()
+                        .HasForeignKey("TypeLicienceId");
+
                     b.HasOne("WebsiteLicenceApp.Models.ApplicationUser", "User")
-                        .WithMany("UserLicences")
+                        .WithMany()
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618

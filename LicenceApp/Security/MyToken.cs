@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace LicenceApp
 {
-     class MyToken 
+     public class MyToken 
     {
-        private TokenResponse requestPasswordToken;
+        public  static TokenResponse requestPasswordToken;
         private HttpClient client;
         const string clientId = "Authentication.Agent";
         const string url = "https://localhost:44370";

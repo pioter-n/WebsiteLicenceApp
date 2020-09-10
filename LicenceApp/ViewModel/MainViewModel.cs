@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-
+using IdentityModel.Client;
 using LicenceApp.Model;
 using LicenceApplication;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Windows.Input;
 
@@ -78,6 +79,9 @@ namespace LicenceApp.ViewModel
                 }
                 else
                 {
+                    HttpClient client = new HttpClient();
+                        client.SetBearerToken(MyToken.requestPasswordToken.AccessToken);
+                    var res = await client.GetAsync("https://localhost:44370/api/UserLicence");
                     if (_dbContext.Users.Count(t => t.Name == UserName) == 0)
                     {
                         byte[] PasByte = MyHash.GenerateSaltedHash(Encoding.Unicode.GetBytes(Password));
