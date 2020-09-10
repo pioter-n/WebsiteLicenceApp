@@ -33,7 +33,6 @@ namespace LicenceApp
             });
             if (requestPasswordToken.IsError)
             {
-               
 
                 return false;
             }

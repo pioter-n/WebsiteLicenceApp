@@ -5,6 +5,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -19,9 +20,9 @@
         <TextBlock Grid.Row="0" Grid.Column="0">UserName:</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="0">Password:</TextBlock>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="3" Grid.ColumnSpan="2" Visibility="{Binding isIncorrect, Converter={StaticResource BoolToVis}}" Content="Insert password or username!"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="OK" Command="{Binding LoginCommand}" Margin="158,2,0,4" Width="100" HorizontalAlignment="Left" />
+        <Label Grid.Row="3" Grid.ColumnSpan="2" Visibility="{Binding isIncorrect, Converter={StaticResource BoolToVis}}" Content="Incorrect password or username!" Foreground="#FFFB0000"/>
+        <Button Grid.Row="2" Grid.Column="1"   Content="OK"  Command="{Binding LoginCommand}"  Margin="158,2,0,4" Width="100" HorizontalAlignment="Left" />
         <Button Grid.Row="2" Content="Cancel"  Margin="3,3,0,3" Width="100" HorizontalAlignment="Left" />
+        <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="262" AutomationProperties.ItemType="*"/>
     </Grid>
 </Window>
