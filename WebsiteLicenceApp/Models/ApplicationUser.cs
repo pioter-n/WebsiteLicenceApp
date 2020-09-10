@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebsiteLicenceApp.Areas.Licence.Models;
 
 namespace WebsiteLicenceApp.Models
 {
@@ -14,5 +15,6 @@ namespace WebsiteLicenceApp.Models
         public ApplicationUser(string userName) : base(userName)
         {
         }
+        public virtual ICollection<UserLicence> UserLicences { get; set; }
     }
 }

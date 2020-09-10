@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebsiteLicenceApp.Areas.Licence.Models;
 using WebsiteLicenceApp.Models;
 
 namespace WebsiteLicenceApp.Controllers
@@ -27,6 +28,8 @@ namespace WebsiteLicenceApp.Controllers
         {
             return View();
         }
+     
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

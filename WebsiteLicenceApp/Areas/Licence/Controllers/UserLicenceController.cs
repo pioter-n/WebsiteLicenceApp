@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebsiteLicenceApp.Data;
+using WebsiteLicenceApp.Areas.Licence.Models;
 using WebsiteLicenceApp.Models;
 
 namespace WebsiteLicenceApp.Areas.Licence.Controllers
@@ -15,28 +16,29 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
-    public class LicenceController : ControllerBase
+    public class UserLicenceController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public LicenceController(ApplicationDbContext context)
+        public UserLicenceController(ApplicationDbContext context)
         {
             _context = context;
         }
         // GET: api/LicenceModels
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<string>> GetUserLicence()
+        public async Task<ActionResult<ApplicationUser>> GetUserLicence()
         {
-            List<Models.Licence> a = await _context.UserLicence.ToListAsync();
+            //List<Models.UserLicence> a = await _context.UserLicence.ToListAsync();
+            ApplicationUser a =  _context.Users.First<ApplicationUser>();
             //return _context.UserLicence.First<LicenceModel>().User;
-            return "Piotr";
+            return a;
             //return await _context.UserLicence.ToListAsync();
         }
 
         // GET: api/LicenceModels/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Models.Licence>> GetLicenceModel(int id)
+        public async Task<ActionResult<Models.UserLicence>> GetLicenceModel(int id)
         {
             var licenceModel = await _context.UserLicence.FindAsync(id);
 
@@ -53,7 +55,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLicenceModel(int id, Models.Licence licenceModel)
+        public async Task<IActionResult> PutLicenceModel(int id, Models.UserLicence licenceModel)
         {
             if (id != licenceModel.Id)
             {
@@ -86,7 +88,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Models.Licence>> PostLicenceModel(Models.Licence licenceModel)
+        public async Task<ActionResult<Models.UserLicence>> PostLicenceModel(Models.UserLicence licenceModel)
         {
             _context.UserLicence.Add(licenceModel);
             await _context.SaveChangesAsync();
@@ -97,7 +99,7 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // DELETE: api/LicenceModels/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult<Models.Licence>> DeleteLicenceModel(int id)
+        public async Task<ActionResult<Models.UserLicence>> DeleteLicenceModel(int id)
         {
             var licenceModel = await _context.UserLicence.FindAsync(id);
             if (licenceModel == null)
