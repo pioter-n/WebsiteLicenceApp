@@ -27,10 +27,11 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
         // GET: api/LicenceModels
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<ApplicationUser>> GetUserLicence()
+        public ActionResult<UserLicence> GetUserLicence()
         {
             //List<Models.UserLicence> a = await _context.UserLicence.ToListAsync();
-            ApplicationUser a =  _context.Users.First<ApplicationUser>();
+            UserLicence a = _context.Users.First<ApplicationUser>().UserLicences.First<UserLicence>();
+            
             //return _context.UserLicence.First<LicenceModel>().User;
             return a;
             //return await _context.UserLicence.ToListAsync();

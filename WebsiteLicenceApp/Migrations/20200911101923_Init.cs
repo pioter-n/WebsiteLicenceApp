@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebsiteLicenceApp.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,6 +78,20 @@ namespace WebsiteLicenceApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TypeLicences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Month = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypeLicences", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,16 +206,17 @@ namespace WebsiteLicenceApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(nullable: true),
-                    Licence = table.Column<string>(nullable: true),
-                    Paid = table.Column<bool>(nullable: false)
+                    Licences = table.Column<string>(nullable: true),
+                    Paid = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserLicence", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserLicence_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserLicence_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -268,9 +283,9 @@ namespace WebsiteLicenceApp.Migrations
                 columns: new[] { "SubjectId", "ClientId", "Type" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLicence_UserId",
+                name: "IX_UserLicence_ApplicationUserId",
                 table: "UserLicence",
-                column: "UserId");
+                column: "ApplicationUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -295,6 +310,9 @@ namespace WebsiteLicenceApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "TypeLicences");
 
             migrationBuilder.DropTable(
                 name: "UserLicence");

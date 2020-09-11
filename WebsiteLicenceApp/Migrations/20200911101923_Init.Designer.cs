@@ -10,8 +10,8 @@ using WebsiteLicenceApp.Data;
 namespace WebsiteLicenceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200910131053_EditLicence")]
-    partial class EditLicence
+    [Migration("20200911101923_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -263,6 +263,9 @@ namespace WebsiteLicenceApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -272,12 +275,9 @@ namespace WebsiteLicenceApp.Migrations
                     b.Property<bool>("Paid")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("UserLicence");
                 });
@@ -400,9 +400,9 @@ namespace WebsiteLicenceApp.Migrations
 
             modelBuilder.Entity("WebsiteLicenceApp.Areas.Licence.Models.UserLicence", b =>
                 {
-                    b.HasOne("WebsiteLicenceApp.Models.ApplicationUser", "User")
+                    b.HasOne("WebsiteLicenceApp.Models.ApplicationUser", null)
                         .WithMany("UserLicences")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

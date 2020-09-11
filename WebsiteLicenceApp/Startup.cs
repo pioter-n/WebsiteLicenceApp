@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using System.Collections.Generic;
+using IdentityServer4;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebsiteLicenceApp
 {
@@ -49,8 +51,11 @@ namespace WebsiteLicenceApp
                 .AddClientStore<CustomClientStore>()
                 .AddInMemoryApiResources(resources);
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            }).AddIdentityServerJwt();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -58,7 +63,7 @@ namespace WebsiteLicenceApp
             {
                 options.TokenValidationParameters.ValidAudiences = new List<string> { "api" };
             });
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,10 +99,10 @@ namespace WebsiteLicenceApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
 
-         
 
-                   endpoints.MapRazorPages();
-              
+
+                endpoints.MapRazorPages();
+
             });
         }
     }
