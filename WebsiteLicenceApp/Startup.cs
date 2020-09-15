@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using System.Collections.Generic;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
 
 namespace WebsiteLicenceApp
 {
@@ -44,13 +45,19 @@ namespace WebsiteLicenceApp
                 new ApiResource("api", "My API", new[] {JwtClaimTypes.Name}),
             };
             services.AddSingleton<IClientStore, CustomClientStore>();
-
+          
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential() /* replace in prod env */
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
                 .AddClientStore<CustomClientStore>()
                 .AddInMemoryApiResources(resources);
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = ".AspNetCore.Identity.WebsiteLicenceApp";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
+                options.SlidingExpiration = false;
+            });
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
