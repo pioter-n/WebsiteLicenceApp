@@ -15,5 +15,6 @@ namespace WebsiteLicenceApp.Areas.Licence.Models
         public string Name { get; set; }
         [DisplayName("Month")]
         public int Month { get; set; }
+        public int Price { get; set; }
     }
 }

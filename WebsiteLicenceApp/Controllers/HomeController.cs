@@ -27,7 +27,7 @@ namespace WebsiteLicenceApp.Controllers
 
     
 
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
    
             

@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WebsiteLicenceApp.Areas.Licence.Models;
-using WebsiteLicenceApp.Areas.Order.Models;
+
 using WebsiteLicenceApp.Models;
+using WebsiteLicenceApp.Areas.Orders.Models;
 
 namespace WebsiteLicenceApp.Data
 {
@@ -17,9 +18,9 @@ namespace WebsiteLicenceApp.Data
         }
         public DbSet<UserLicence> UserLicence { get; set; }
         public DbSet<TypeLicences> TypeLicences { get; set; }
+        public DbSet<WebsiteLicenceApp.Areas.Orders.Models.Order> Order { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
+       
 
     }
 }

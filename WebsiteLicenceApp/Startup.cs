@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
+using AutoMapper;
 
 namespace WebsiteLicenceApp
 {
@@ -70,6 +71,7 @@ namespace WebsiteLicenceApp
             {
                 options.TokenValidationParameters.ValidAudiences = new List<string> { "api" };
             });
+            
 
         }
 
@@ -111,6 +113,7 @@ namespace WebsiteLicenceApp
                 endpoints.MapRazorPages();
 
             });
+            
         }
     }
 }

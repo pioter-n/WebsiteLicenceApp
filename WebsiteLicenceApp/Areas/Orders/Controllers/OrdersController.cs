@@ -5,28 +5,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebsiteLicenceApp.Areas.Licence.Models;
+using WebsiteLicenceApp.Areas.Orders.Models;
 using WebsiteLicenceApp.Data;
 
-namespace WebsiteLicenceApp.Areas.Licence.Controllers
+namespace WebsiteLicenceApp.Areas.Orders.Controllers
 {
-    [Area("Licence")]
-    public class TypeLicencesController : Controller
+    [Area("Orders")]
+    public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TypeLicencesController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context)
         {
             _context = context;
+            
         }
 
-        // GET: Licence/TypeLicences
+        // GET: Orders/Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TypeLicences.ToListAsync());
+            return View(await _context.Order.ToListAsync());
         }
 
-        // GET: Licence/TypeLicences/Details/5
+        // GET: Orders/Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +35,42 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
                 return NotFound();
             }
 
-            var typeLicences = await _context.TypeLicences
+            var order = await _context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (typeLicences == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(typeLicences);
+            return View(order);
         }
 
-        // GET: Licence/TypeLicences/Create
+        // GET: Orders/Orders/Create
         public IActionResult Create()
         {
+            ViewBag.Types = new SelectList(_context.TypeLicences, "Id", "Name");
             return View();
         }
 
-        // POST: Licence/TypeLicences/Create
+        // POST: Orders/Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Month,Price")] TypeLicences typeLicences)
+        public async Task<IActionResult> Create(Order order)
         {
+            var i = (SelectList)ViewBag.Types;
+            //ViewBag.Types.
             if (ModelState.IsValid)
             {
-                _context.Add(typeLicences);
+                _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(typeLicences);
+            return View(order);
         }
 
-        // GET: Licence/TypeLicences/Edit/5
+        // GET: Orders/Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +78,22 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
                 return NotFound();
             }
 
-            var typeLicences = await _context.TypeLicences.FindAsync(id);
-            if (typeLicences == null)
+            var order = await _context.Order.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(typeLicences);
+            return View(order);
         }
 
-        // POST: Licence/TypeLicences/Edit/5
+        // POST: Orders/Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Month,Price")] TypeLicences typeLicences)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdUser,Actual")] Order order)
         {
-            if (id != typeLicences.Id)
+            if (id != order.Id)
             {
                 return NotFound();
             }
@@ -98,12 +102,12 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
             {
                 try
                 {
-                    _context.Update(typeLicences);
+                    _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TypeLicencesExists(typeLicences.Id))
+                    if (!OrderExists(order.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +118,10 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(typeLicences);
+            return View(order);
         }
 
-        // GET: Licence/TypeLicences/Delete/5
+        // GET: Orders/Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +129,30 @@ namespace WebsiteLicenceApp.Areas.Licence.Controllers
                 return NotFound();
             }
 
-            var typeLicences = await _context.TypeLicences
+            var order = await _context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (typeLicences == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(typeLicences);
+            return View(order);
         }
 
-        // POST: Licence/TypeLicences/Delete/5
+        // POST: Orders/Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var typeLicences = await _context.TypeLicences.FindAsync(id);
-            _context.TypeLicences.Remove(typeLicences);
+            var order = await _context.Order.FindAsync(id);
+            _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TypeLicencesExists(int id)
+        private bool OrderExists(int id)
         {
-            return _context.TypeLicences.Any(e => e.Id == id);
+            return _context.Order.Any(e => e.Id == id);
         }
     }
 }
