@@ -12,7 +12,7 @@ namespace WebsiteLicenceApp.Areas.Orders.Models
         [Key]
         public int Id { get; set; }
 
-        public int IdUser { get; set; }
+        public string IdUser { get; set; }
         public TypeLicences TypeLicence { get; set; }
         public bool Actual { get; set; }
     }

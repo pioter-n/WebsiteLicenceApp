@@ -2,29 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebsiteLicenceApp.Areas.Orders.Models;
 using WebsiteLicenceApp.Data;
+using WebsiteLicenceApp.Models;
 
 namespace WebsiteLicenceApp.Areas.Orders.Controllers
 {
+
+
+    
+    public class ViewModel
+    {
+        public int SelectedItemId { get; set; }
+        public bool PaynamentCompleted { get; set; }
+        public IReadOnlyCollection<SelectListItem> Items { get; set; } = new List<SelectListItem>();
+    }
+
     [Area("Orders")]
     public class OrdersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager)
         {
-            _context = context;
-            
+            this.context = context;
+            this.userManager = userManager;
         }
+
+
 
         // GET: Orders/Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Order.ToListAsync());
+            return View(await context.Order.ToListAsync());
         }
 
         // GET: Orders/Orders/Details/5
@@ -35,7 +51,7 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order
+            var order = await context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -46,10 +62,14 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
         }
 
         // GET: Orders/Orders/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Types = new SelectList(_context.TypeLicences, "Id", "Name");
-            return View();
+            var viewModel = new ViewModel
+            {
+                Items = await context.TypeLicences.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToArrayAsync(),
+            };
+
+            return View(viewModel);
         }
 
         // POST: Orders/Orders/Create
@@ -57,17 +77,39 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Order order)
+        public async Task<IActionResult> Create(ViewModel viewModel)
         {
-            var i = (SelectList)ViewBag.Types;
-            //ViewBag.Types.
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(viewModel);
             }
-            return View(order);
+
+            var licenseType = await context.TypeLicences
+                .SingleOrDefaultAsync(x => x.Id == viewModel.SelectedItemId);
+
+            if (licenseType == null)
+            {
+                ModelState.AddModelError(nameof(ViewModel.SelectedItemId), "Popraw");
+                return View(viewModel);
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Zaloguj się");
+                return View(viewModel);
+            }
+
+            var order = new Order
+            {
+                IdUser = user.Id,
+                Actual = viewModel.PaynamentCompleted,
+                TypeLicence = licenseType,
+            };
+
+            await context.Order.AddAsync(order);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Orders/Orders/Edit/5
@@ -78,7 +120,7 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.FindAsync(id);
+            var order = await context.Order.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -102,8 +144,8 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    context.Update(order);
+                    await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +171,7 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order
+            var order = await context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -144,15 +186,15 @@ namespace WebsiteLicenceApp.Areas.Orders.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Order.FindAsync(id);
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
+            var order = await context.Order.FindAsync(id);
+            context.Order.Remove(order);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool OrderExists(int id)
         {
-            return _context.Order.Any(e => e.Id == id);
+            return context.Order.Any(e => e.Id == id);
         }
     }
 }

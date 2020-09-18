@@ -1,4 +1,4 @@
-﻿@model WebsiteLicenceApp.Areas.Orders.Models.Order
+﻿@model WebsiteLicenceApp.Areas.Orders.Controllers.ViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Create";
@@ -13,19 +13,15 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdUser" class="control-label"></label>
-                <input asp-for="IdUser" class="form-control" />
-                <span asp-validation-for="IdUser" class="text-danger"></span>
-            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Actual" /> @Html.DisplayNameFor(model => model.Actual)
+                    <input class="form-check-input" asp-for="PaynamentCompleted" />
+                    @Html.DisplayNameFor(model => model.PaynamentCompleted)
                 </label>
             </div>
             <div class="editor-field">
-                @Html.DropDownListFor(model => model.TypeLicence, (SelectList)ViewBag.Types)
-                @Html.ValidationMessageFor(model => model.TypeLicence)
+                @Html.DropDownListFor(model => model.SelectedItemId, Model.Items)
+                @Html.ValidationMessageFor(model => model.SelectedItemId)
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
